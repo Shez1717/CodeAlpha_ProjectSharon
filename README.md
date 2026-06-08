@@ -10,3 +10,16 @@ An interesting flashcard application for a more intense learning and special mem
 -The cards can be easily edited by the user anytime they want to which includes edit current,delete current and add flashcard.
 
 ## Live Demo
+Click to watch demo video ({"source":"/","destination":"/CodeAlpha.cards.html"})
+
+##Screenshots
+<img width="995" height="564" alt="image" src="https://github.com/user-attachments/assets/2731255d-7888-44b6-a433-88214d406892" />
+
+
+##Tech Stack
+**Frontend:**JavaScript
+**Storage:**LocalStorage
+**Deployment**GitHub Pages/Vercel
+
+##Installation
+**Clone the repository**
