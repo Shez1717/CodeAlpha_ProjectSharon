@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fitness Tracker</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f4f6f9; }
+    h2 { text-align: center; color: #2c3e50; }
+    .dashboard { max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    input, button { margin: 5px; padding: 8px; }
+    .progress { background: #eee; border-radius: 5px; overflow: hidden; margin: 10px 0; }
+    .bar { height: 20px; background: #3498db; width: 0%; transition: width 0.5s; }
+    .summary { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h2>Daily Fitness Tracker</h2>
+  <div class="dashboard">
+    <input type="number" id="steps" placeholder="Steps">
+    <input type="number" id="workouts" placeholder="Workouts (minutes)">
+    <input type="number" id="calories" placeholder="Calories burned">
+    <button onclick="logData()">Log Activity</button>
+
+    <div class="summary">
+      <h3>Summary</h3>
+      <p id="stepsSummary">Steps: 0</p>
+      <div class="progress"><div id="stepsBar" class="bar"></div></div>
+
+      <p id="workoutsSummary">Workouts: 0 min</p>
+      <div class="progress"><div id="workoutsBar" class="bar"></div></div>
+
+      <p id="caloriesSummary">Calories: 0</p>
+      <div class="progress"><div id="caloriesBar" class="bar"></div></div>
+    </div>
+  </div>
+
+  <script>
+    let fitnessData = JSON.parse(localStorage.getItem("fitnessData")) || { steps: 0, workouts: 0, calories: 0 };
+
+    function logData() {
+      const steps = parseInt(document.getElementById("steps").value) || 0;
+      const workouts = parseInt(document.getElementById("workouts").value) || 0;
+      const calories = parseInt(document.getElementById("calories").value) || 0;
+
+      fitnessData.steps += steps;
+      fitnessData.workouts += workouts;
+      fitnessData.calories += calories;
+
+      localStorage.setItem("fitnessData", JSON.stringify(fitnessData));
+      updateDashboard();
+    }
+
+    function updateDashboard() {
+      document.getElementById("stepsSummary").innerText = "Steps: " + fitnessData.steps;
+      document.getElementById("workoutsSummary").innerText = "Workouts: " + fitnessData.workouts + " min";
+      document.getElementById("caloriesSummary").innerText = "Calories: " + fitnessData.calories;
+
+      document.getElementById("stepsBar").style.width = Math.min(fitnessData.steps / 100, 100) + "%";
+      document.getElementById("workoutsBar").style.width = Math.min(fitnessData.workouts / 60, 100) + "%";
+      document.getElementById("caloriesBar").style.width = Math.min(fitnessData.calories / 500, 100) + "%";
+    }
+
+    updateDashboard();
+  </script>
+</body>
+</html>

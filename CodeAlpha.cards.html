@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Flashcard Quiz App</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+    .card { border: 1px solid #ccc; padding: 20px; width: 300px; margin: auto; }
+    button { margin: 5px; padding: 8px 12px; }
+    input { margin: 5px; padding: 8px; width: 80%; }
+    
+  body { 
+    font-family: Arial, sans-serif; 
+    text-align: center; 
+    margin: 20px; 
+    background-color: #f4f6f9; /* soft background */
+  }
+
+  h2 { 
+    color: #2c3e50; /* dark blue-gray */
+  }
+
+  .card { 
+    border: 2px solid #3498db; /* blue border */
+    border-radius: 10px;
+    padding: 20px; 
+    width: 300px; 
+    margin: auto; 
+    background-color: #ffffff; /* white card */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* subtle shadow */
+  }
+
+  #question { 
+    font-weight: bold; 
+    color: #34495e; /* deep gray */
+  }
+
+  #answer { 
+    color: #27ae60; /* green for answers */
+    font-style: italic;
+  }
+
+  button { 
+    margin: 5px; 
+    padding: 8px 12px; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    font-weight: bold;
+  }
+
+  button:hover { 
+    opacity: 0.9; 
+  }
+
+  /* Specific button colors */
+  button:nth-of-type(1) { background-color: #e67e22; color: white; } /* Show Answer */
+  button:nth-of-type(2) { background-color: #9b59b6; color: white; } /* Previous */
+  button:nth-of-type(3) { background-color: #3498db; color: white; } /* Next */
+  button:nth-of-type(4) { background-color: #2ecc71; color: white; } /* Add */
+  button:nth-of-type(5) { background-color: #f1c40f; color: white; } /* Edit */
+  button:nth-of-type(6) { background-color: #e74c3c; color: white; } /* Delete */
+
+  input { 
+    margin: 5px; 
+    padding: 8px; 
+    width: 80%; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+  }
+
+  </style>
+</head>
+<body>
+  <h2>Flashcard Quiz App</h2>
+  <div class="card">
+    <p id="question">Question will appear here</p>
+    <p id="answer" style="display:none;">Answer will appear here</p>
+    <button onclick="showAnswer()">Show Answer</button><br>
+    <button onclick="prevCard()">Previous</button>
+    <button onclick="nextCard()">Next</button>
+  </div>
+
+  <h3>Manage Flashcards</h3>
+  <input type="text" id="newQuestion" placeholder="Enter question">
+  <input type="text" id="newAnswer" placeholder="Enter answer">
+  <button onclick="addCard()">Add Flashcard</button>
+  <button onclick="editCard()">Edit Current</button>
+  <button onclick="deleteCard()">Delete Current</button>
+
+  <script>
+    let flashcards = JSON.parse(localStorage.getItem("flashcards")) || [
+      {question: "Capital of France?", answer: "Paris"},
+      {question: "2 + 2?", answer: "4"}
+    ];
+    let currentIndex = 0;
+
+    function displayCard() {
+      document.getElementById("question").innerText = flashcards[currentIndex].question;
+      document.getElementById("answer").innerText = flashcards[currentIndex].answer;
+      document.getElementById("answer").style.display = "none";
+    }
+
+    function showAnswer() {
+      document.getElementById("answer").style.display = "block";
+    }
+
+    function nextCard() {
+      if(currentIndex < flashcards.length - 1) currentIndex++;
+      displayCard();
+    }
+
+    function prevCard() {
+      if(currentIndex > 0) currentIndex--;
+      displayCard();
+    }
+
+    function addCard() {
+      const q = document.getElementById("newQuestion").value;
+      const a = document.getElementById("newAnswer").value;
+      if(q && a) {
+        flashcards.push({question: q, answer: a});
+        localStorage.setItem("flashcards", JSON.stringify(flashcards));
+        currentIndex = flashcards.length - 1;
+        displayCard();
+      }
+    }
+
+    function editCard() {
+      const q = document.getElementById("newQuestion").value;
+      const a = document.getElementById("newAnswer").value;
+      if(q && a) {
+        flashcards[currentIndex] = {question: q, answer: a};
+        localStorage.setItem("flashcards", JSON.stringify(flashcards));
+        displayCard();
+      }
+    }
+
+    function deleteCard() {
+      flashcards.splice(currentIndex, 1);
+      if(currentIndex >= flashcards.length) currentIndex = flashcards.length - 1;
+      localStorage.setItem("flashcards", JSON.stringify(flashcards));
+      if(flashcards.length > 0) displayCard();
+      else document.getElementById("question").innerText = "No flashcards left!";
+    }
+
+    displayCard();
+  </script>
+</body>
+</html>
